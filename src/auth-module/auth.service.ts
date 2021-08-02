@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly authRepository: AuthRepository,
-  ) { }
+  ) {}
 
   register = async (registerDTO: RegisterDTO) => {
     try {
@@ -24,7 +24,7 @@ export class AuthService {
 
       registerDTO.password = hashedPassword;
 
-      const user: UserEntity = await this.authRepository.register( registerDTO );
+      const user: UserEntity = await this.authRepository.register(registerDTO);
 
       if (user) {
         console.log('userCreated');
@@ -42,12 +42,14 @@ export class AuthService {
 
   login = async (loginDTO: LoginDTO) => {
     const { email, password } = loginDTO;
-    const user: UserEntity = await this.userRepository.getUserByEmail({ email });
+    const user: UserEntity = await this.userRepository.getUserByEmail({
+      email,
+    });
 
     const comp = await compare(password, user.authentication.provider_user_key);
 
-    if (comp){
-      console.log("HO GAYA");
+    if (comp) {
+      console.log('HO GAYA');
     }
-  }
+  };
 }

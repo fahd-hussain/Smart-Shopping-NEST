@@ -17,5 +17,5 @@ export class AuthRepository extends Repository<AuthEntity> {
     await newUser.save();
 
     return newUser;
-  }
+  };
 }
