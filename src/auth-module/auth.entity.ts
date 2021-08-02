@@ -22,7 +22,7 @@ export class AuthEntity extends BaseEntity {
   is_verified: Boolean;
 
   @Column({
-    default: "randomString"
+    default: 'randomString',
   })
   verification_code: string;
 
