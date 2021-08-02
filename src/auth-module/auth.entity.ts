@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -7,8 +8,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { genSalt, hash, compare } from 'bcrypt';
+import { generate } from 'randomstring';
 
-const randomString = Math.random().toString(36).substr(2, 5);
+const randomString = generate({
+  length: 64,
+  charset: 'alphabetic'
+});
 
 @Entity('auth')
 export class AuthEntity extends BaseEntity {
@@ -22,14 +28,14 @@ export class AuthEntity extends BaseEntity {
   is_verified: Boolean;
 
   @Column({
-    default: 'randomString',
+    default: randomString
   })
   verification_code: string;
 
   @Column({
     nullable: false,
   })
-  provider_user_key: string;
+  password: string;
 
   @Column({
     type: 'boolean',
@@ -45,4 +51,14 @@ export class AuthEntity extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    const salt = await genSalt(+process.env.SALT_LEN);
+    this.password = await hash(this.password, salt);
+  }
+
+  async comparePassword(attempt: string): Promise<boolean> {
+    return await compare(attempt, this.password);
+  }
 }
