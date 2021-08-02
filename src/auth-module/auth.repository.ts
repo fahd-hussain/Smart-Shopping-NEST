@@ -11,11 +11,15 @@ export class AuthRepository extends Repository<AuthEntity> {
     const newAuth = new AuthEntity();
 
     newUser.email = email;
-    newAuth.provider_user_key = password;
+    newAuth.password = password;
     newUser.authentication = newAuth;
 
     await newUser.save();
 
     return newUser;
+  }
+
+  comparePassword = async ({ user, password }: { user: UserEntity, password: string }) => {
+    return await user.authentication.comparePassword(password);
   }
 }
