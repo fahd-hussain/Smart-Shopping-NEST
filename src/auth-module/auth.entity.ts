@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { genSalt, hash, compare } from 'bcrypt';
 import { generate } from 'randomstring';
-import * as jwt from "jsonwebtoken";
+
 const randomString = generate({
   length: 64,
   charset: 'alphabetic'

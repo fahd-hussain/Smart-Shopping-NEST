@@ -8,6 +8,9 @@ import { UserEntity } from '../entity/user.entity';
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
   getUserByEmail = async ({ email }): Promise<any> => {
-    return await this.findOneOrFail({ email }, { relations: ['authentication'] });
-  }
+    return await this.findOneOrFail(
+      { email },
+      { relations: ['authentication'] },
+    );
+  };
 }

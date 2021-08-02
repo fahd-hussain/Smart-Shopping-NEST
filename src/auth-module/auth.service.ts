@@ -12,7 +12,7 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly authRepository: AuthRepository,
-  ) { }
+  ) {}
 
   register = async (registerDTO: RegisterDTO) => {
     try {
@@ -48,5 +48,5 @@ export class AuthService {
       
       throw error;
     }
-  }
+  };
 }
