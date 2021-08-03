@@ -17,9 +17,15 @@ export class AuthRepository extends Repository<AuthEntity> {
     await newUser.save();
 
     return newUser;
-  }
+  };
 
-  comparePassword = async ({ user, password }: { user: UserEntity, password: string }) => {
+  comparePassword = async ({
+    user,
+    password,
+  }: {
+    user: UserEntity;
+    password: string;
+  }) => {
     return await user.authentication.comparePassword(password);
-  }
+  };
 }

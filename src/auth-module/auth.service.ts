@@ -2,7 +2,6 @@
 import { UserRepository } from 'src/app-module/user-module/repository/user.repository';
 import { RegisterDTO } from './dto/register.dto';
 import { Injectable } from '@nestjs/common';
-import { compare } from 'bcrypt';
 import { AuthRepository } from './auth.repository';
 import { UserEntity } from 'src/app-module/user-module/entity/user.entity';
 import { LoginDTO } from './dto/login.dto';
@@ -19,7 +18,7 @@ export class AuthService {
       const user: UserEntity = await this.authRepository.register(registerDTO);
 
       if (user) {
-        return user.toResponseObject()
+        return user.toResponseObject();
       }
     } catch (error) {
       if (error.errno === 1062) {
@@ -35,17 +34,19 @@ export class AuthService {
   login = async (loginDTO: LoginDTO) => {
     try {
       const { email, password } = loginDTO;
-      const user: UserEntity = await this.userRepository.getUserByEmail({ email });
-      const compare = this.authRepository.comparePassword({ user, password })
+      const user: UserEntity = await this.userRepository.getUserByEmail({
+        email,
+      });
+      const compare = this.authRepository.comparePassword({ user, password });
 
-      if (compare){
-        return user.toResponseObject()
+      if (compare) {
+        return user.toResponseObject();
       }
     } catch (error) {
-      if (error.name == 'EntityNotFoundError'){
-        return 'Username/password is incorrect'
+      if (error.name == 'EntityNotFoundError') {
+        return 'Username/password is incorrect';
       }
-      
+
       throw error;
     }
   };

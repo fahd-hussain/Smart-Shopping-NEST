@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { sign } from "jsonwebtoken";
+import { sign } from 'jsonwebtoken';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -47,7 +47,7 @@ export class UserEntity extends BaseEntity {
       id,
       email,
       created_at,
-      updated_at
+      updated_at,
     };
 
     if (showToken) {
@@ -66,7 +66,7 @@ export class UserEntity extends BaseEntity {
         email,
       },
       //process.env.JWT_SECRET,
-      "Iam safiushg",
+      'Iam safiushg',
       { expiresIn: '7d' },
     );
   }

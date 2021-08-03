@@ -13,7 +13,7 @@ import { generate } from 'randomstring';
 
 const randomString = generate({
   length: 64,
-  charset: 'alphabetic'
+  charset: 'alphabetic',
 });
 
 @Entity('auth')
@@ -28,7 +28,7 @@ export class AuthEntity extends BaseEntity {
   is_verified: Boolean;
 
   @Column({
-    default: randomString
+    default: randomString,
   })
   verification_code: string;
 
