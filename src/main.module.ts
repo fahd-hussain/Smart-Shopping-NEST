@@ -8,9 +8,11 @@ import { HttpErrorFilter } from './shared/http-error.filter';
 
 @Module({
   imports: [TypeOrmModule.forRoot(ormConfig), AuthModule, AppModule],
-  providers: [{
-    provide: APP_FILTER,
-    useClass: HttpErrorFilter
-  }]
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter,
+    },
+  ],
 })
 export class MainModule {}

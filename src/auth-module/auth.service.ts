@@ -35,17 +35,19 @@ export class AuthService {
   login = async (loginDTO: LoginDTO) => {
     try {
       const { email, password } = loginDTO;
-      const user: UserEntity = await this.userRepository.getUserByEmail({ email });
-      const compare = this.authRepository.comparePassword({ user, password })
+      const user: UserEntity = await this.userRepository.getUserByEmail({
+        email,
+      });
+      const compare = this.authRepository.comparePassword({ user, password });
 
-      if (compare){
-        return "Loged in"
+      if (compare) {
+        return 'Loged in';
       }
     } catch (error) {
-      if (error.name == 'EntityNotFoundError'){
-        return 'Username/password is incorrect'
+      if (error.name == 'EntityNotFoundError') {
+        return 'Username/password is incorrect';
       }
-      
+
       throw error;
     }
   };
