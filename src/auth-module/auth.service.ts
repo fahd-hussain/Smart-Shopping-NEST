@@ -1,7 +1,6 @@
-// import { CreateUserDTO } from 'src/app-module/user-module/dto/create-user.dto';
 import { UserRepository } from 'src/app-module/user-module/repository/user.repository';
 import { RegisterDTO } from './dto/register.dto';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthRepository } from './auth.repository';
 import { UserEntity } from 'src/app-module/user-module/entity/user.entity';
 import { LoginDTO } from './dto/login.dto';
@@ -22,11 +21,9 @@ export class AuthService {
       }
     } catch (error) {
       if (error.errno === 1062) {
-        const newError = 'User already exist';
-        // throw
-        console.log(newError);
+        throw new HttpException('Email already exist', HttpStatus.CONFLICT);
       }
-      console.log(error);
+
       throw error;
     }
   };
@@ -44,7 +41,10 @@ export class AuthService {
       }
     } catch (error) {
       if (error.name == 'EntityNotFoundError') {
-        return 'Username/password is incorrect';
+        throw new HttpException(
+          'Email/password is incorrect',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
 
       throw error;
