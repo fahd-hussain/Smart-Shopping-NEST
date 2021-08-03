@@ -19,7 +19,7 @@ export class AuthService {
       const user: UserEntity = await this.authRepository.register(registerDTO);
 
       if (user) {
-        console.log('userCreated');
+        return user.toResponseObject()
       }
     } catch (error) {
       if (error.errno === 1062) {
@@ -39,7 +39,7 @@ export class AuthService {
       const compare = this.authRepository.comparePassword({ user, password })
 
       if (compare){
-        return "Loged in"
+        return user.toResponseObject()
       }
     } catch (error) {
       if (error.name == 'EntityNotFoundError'){
