@@ -1,9 +1,7 @@
-import { AuthEntity } from 'src/auth-module/auth.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
@@ -11,6 +9,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { sign } from 'jsonwebtoken';
+import { env } from 'process';
+import { AuthEntity } from '../../auth/entity/auth.entity';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -30,19 +30,16 @@ export class UserEntity extends BaseEntity {
     type: 'boolean',
     default: false,
   })
-  is_del: Boolean;
+  deleted: Boolean;
 
   @CreateDateColumn()
   created_at: Date;
-
-  @DeleteDateColumn()
-  deleted_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
 
   toResponseObject(showToken: boolean = true): UserRO {
-    const { id, email, created_at, updated_at, token } = this;
+    const { id, email, created_at, updated_at } = this;
     const responseObject: UserRO = {
       id,
       email,
@@ -51,22 +48,22 @@ export class UserEntity extends BaseEntity {
     };
 
     if (showToken) {
-      responseObject.token = token;
+      responseObject.token = this.token;
     }
 
     return responseObject;
   }
 
   private get token(): string {
-    const { id, email } = this;
+    const { id, email, authentication: { verified } } = this;
 
     return sign(
       {
         id,
         email,
+        verified,
       },
-      //process.env.JWT_SECRET,
-      'Iam safiushg',
+      env.JWT_SECRET,
       { expiresIn: '7d' },
     );
   }
