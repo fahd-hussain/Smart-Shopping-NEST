@@ -117,4 +117,27 @@ export class AuthService {
       throw error;
     }
   };
+
+  getVerificationCode = async (email: string) => {
+    try {
+      const user: UserEntity = await this.userRepository.getUserByEmail({
+        email,
+      });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      if (
+        user.authentication.verification_code.length &&
+        user.authentication.verified
+      ) {
+        return 'User already verified';
+      }
+
+      return user.authentication.verification_code;
+    } catch (error) {
+      throw error;
+    }
+  };
 }
