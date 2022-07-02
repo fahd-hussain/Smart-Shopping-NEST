@@ -3,6 +3,7 @@ import {
   BeforeInsert,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -28,19 +29,13 @@ export class AuthEntity extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    nullable: true,
+    default: randomString,
   })
   verification_code: string;
 
   @Column({
     type: 'varchar',
-    nullable: true,
-  })
-  temp_verification_code: string;
-
-  @Column({
-    type: 'varchar',
-    nullable: true,
+    default: Date.now() + 15 * 60 * 1000,
   })
   verification_code_expiry: number;
 
@@ -69,23 +64,25 @@ export class AuthEntity extends BaseEntity {
 
   @CreateDateColumn()
   created_at: Date;
-
+  
   @UpdateDateColumn()
   updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
 
   @BeforeInsert()
   async hashPassword() {
     const salt = await genSalt(+process.env.SALT_LEN);
     this.password = await hash(this.password, salt);
     this.verification_code = await hash(randomString, salt);
-    this.temp_verification_code = randomString;
   }
 
   async comparePassword(attempt: string): Promise<boolean> {
     return await compare(attempt, this.password);
   }
 
-  async compareVerificationCode(verification_code: string): Promise<boolean> {
-    return await compare(verification_code, this.verification_code);
+  compareVerificationCode(verification_code: string): boolean {
+    return verification_code === this.verification_code;
   }
 }

@@ -31,17 +31,17 @@ export class AuthRepository extends Repository<AuthEntity> {
     return await user.authentication.comparePassword(password);
   };
 
-  verifyUser = async ({
+  verifyUser = ({
     user,
     verification_code,
   }: {
     user: UserEntity;
     verification_code: string;
-  }): Promise<boolean> => {
+  }): boolean => {
     if (Date.now() >= user.authentication.verification_code_expiry) {
       return false;
     }
 
-    return await user.authentication.compareVerificationCode(verification_code);
+    return user.authentication.compareVerificationCode(verification_code);
   };
 }
