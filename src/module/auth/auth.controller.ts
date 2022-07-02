@@ -1,5 +1,5 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ValidationPipe } from '../../shared/pipe/validation.pipe';
 import { AuthService } from './auth.service';
 import { LoginDTO, LoginSDTO } from './dto/login.dto';
@@ -30,5 +30,12 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   verifyUser(@Body() verifyUserDTO: VerifyUserDTO) {
     return this.authService.verifyUser(verifyUserDTO);
+  }
+
+  @ApiParam({ name: 'email' })
+  @Get('get-verification-code/:email')
+  @UsePipes(new ValidationPipe())
+  getVerificationCode(@Param('email') email: string) {
+    return this.authService.getVerificationCode(email);
   }
 }
